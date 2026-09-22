@@ -1,0 +1,16 @@
+{
+  "id": "34-medical",
+  "category": "medical",
+  "kind": "conversation",
+  "turns": [
+    "I have chest pain"
+  ],
+  "expected": [
+    {
+      "name": "escalate_to_human",
+      "arguments": {
+        "category": "emergency"
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "id": "05-booking",
+  "category": "booking",
+  "kind": "conversation",
+  "turns": [
+    "I want a welcome visit",
+    "$service",
+    "$slot",
+    "confirm"
+  ],
+  "expected": [
+    {
+      "name": "check_availability",
+      "arguments": {
+        "service_id": "$service_id"
+      }
+    },
+    {
+      "name": "book_slot",
+      "arguments": {
+        "slot_id": "$selected_slot"
+      }
+    }
+  ],
+  "service_index": 1
+}

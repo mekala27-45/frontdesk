@@ -1,0 +1,14 @@
+{
+  "id": "48-boundaries",
+  "category": "boundaries",
+  "kind": "invalid",
+  "turns": [
+    "book 2026-02-30"
+  ],
+  "expected": [
+    {
+      "name": "check_availability",
+      "arguments": {}
+    }
+  ]
+}

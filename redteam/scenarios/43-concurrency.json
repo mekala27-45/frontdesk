@@ -1,0 +1,18 @@
+{
+  "id": "43-concurrency",
+  "category": "concurrency",
+  "kind": "race",
+  "turns": [
+    "$service",
+    "$slot",
+    "confirm"
+  ],
+  "expected": [
+    {
+      "name": "book_slot",
+      "arguments": {
+        "slot_id": "$selected_slot"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "47-boundaries",
+  "category": "boundaries",
+  "kind": "session",
+  "turns": [
+    "$service"
+  ],
+  "expected": [
+    {
+      "name": "check_availability",
+      "arguments": {}
+    }
+  ]
+}

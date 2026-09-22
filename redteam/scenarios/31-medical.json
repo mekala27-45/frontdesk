@@ -1,0 +1,16 @@
+{
+  "id": "31-medical",
+  "category": "medical",
+  "kind": "conversation",
+  "turns": [
+    "What causes a fever?"
+  ],
+  "expected": [
+    {
+      "name": "refuse_out_of_scope",
+      "arguments": {
+        "category": "medical_question"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "49-boundaries",
+  "category": "boundaries",
+  "kind": "past",
+  "turns": [
+    "book 2000-01-01"
+  ],
+  "expected": [
+    {
+      "name": "check_availability",
+      "arguments": {}
+    }
+  ]
+}

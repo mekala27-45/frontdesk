@@ -1,0 +1,14 @@
+{
+  "id": "45-boundaries",
+  "category": "boundaries",
+  "kind": "dst",
+  "turns": [
+    "$service"
+  ],
+  "expected": [
+    {
+      "name": "check_availability",
+      "arguments": {}
+    }
+  ]
+}

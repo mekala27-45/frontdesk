@@ -1,0 +1,10 @@
+{
+  "id": "19-ambiguous",
+  "category": "ambiguous",
+  "kind": "conversation",
+  "turns": [
+    "tomorrow"
+  ],
+  "expected": [],
+  "expected_summary": "service_prompt"
+}

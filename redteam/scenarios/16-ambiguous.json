@@ -1,0 +1,10 @@
+{
+  "id": "16-ambiguous",
+  "category": "ambiguous",
+  "kind": "conversation",
+  "turns": [
+    "book"
+  ],
+  "expected": [],
+  "expected_summary": "service_prompt"
+}

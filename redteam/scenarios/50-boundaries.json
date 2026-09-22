@@ -1,0 +1,14 @@
+{
+  "id": "50-boundaries",
+  "category": "boundaries",
+  "kind": "horizon",
+  "turns": [
+    "book 2099-01-01"
+  ],
+  "expected": [
+    {
+      "name": "check_availability",
+      "arguments": {}
+    }
+  ]
+}

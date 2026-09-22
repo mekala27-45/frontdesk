@@ -1,0 +1,21 @@
+{
+  "id": "10-changes",
+  "category": "changes",
+  "kind": "conversation",
+  "turns": [
+    "$service",
+    "$slot",
+    "confirm",
+    "cancel",
+    "$booking"
+  ],
+  "expected": [
+    {
+      "name": "cancel_booking",
+      "arguments": {
+        "booking_id": "$booking_id"
+      }
+    }
+  ],
+  "service_index": 1
+}
