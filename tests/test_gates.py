@@ -26,3 +26,24 @@ def test_renderer_clean_violation_empty(tmp_path):
         render(tmp_path, {})
     with pytest.raises(ValueError):
         render(tmp_path / "missing", {"count": "1"})
+
+
+def test_timezone_gate_clean_violation_empty(tmp_path):
+    from scripts.check_timezones import violations
+
+    source = tmp_path / "clock.py"
+    source.write_text("from datetime import datetime, UTC\nx=datetime.now(UTC)\n")
+    assert not violations([source])
+    source.write_text("from datetime import datetime\nx=datetime.now()\n")
+    assert violations([source])
+    with pytest.raises(ValueError):
+        violations([])
+
+
+def test_uuid7_is_monotonic():
+    from uuid import UUID
+
+    from frontdesk_core.contracts import uuid7
+
+    values = [UUID(uuid7()) for _ in range(100)]
+    assert values == sorted(values) and all(v.version == 7 for v in values)

@@ -108,3 +108,32 @@ def test_optional_model_forced_output_and_budget(monkeypatch):
         judge.score("Choose a time.")
     with pytest.raises(ValueError):
         judge.score("")
+
+
+def test_emergency_precedes_model_and_persistent_budget(db, clinic, monkeypatch):
+    from unittest.mock import MagicMock
+
+    import litellm
+    from frontdesk_agent.engine import ingest
+    from frontdesk_agent.llm import BudgetExceeded, LiteLLMPolicy
+    from frontdesk_core.contracts import now, uuid7
+
+    c, _, _, _, _ = clinic
+    policy = MagicMock()
+    result = ingest(
+        db, c.whatsapp_phone_number_id, "15550001111", uuid7(), "can't breathe", now(), policy
+    )
+    policy.plan.assert_not_called()
+    assert result["calls"][0]["name"] == "escalate_to_human"
+    monkeypatch.setattr(litellm, "cost_per_token", lambda **kwargs: (0.001, 0.001))
+
+    def unavailable(**kwargs):
+        raise RuntimeError("Synthetic network failure")
+
+    monkeypatch.setattr(litellm, "completion", unavailable)
+    first = LiteLLMPolicy("durable-test", 0.002, db)
+    with pytest.raises(RuntimeError):
+        first.plan(["book"])
+    restarted = LiteLLMPolicy("durable-test", 0.002, db)
+    with pytest.raises(BudgetExceeded):
+        restarted.plan(["book"])

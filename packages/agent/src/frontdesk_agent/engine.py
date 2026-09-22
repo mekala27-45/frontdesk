@@ -93,8 +93,12 @@ def respond(
             calls,
             "confirmation",
         )
-    if normalized in {"first", "first one", "1", "second", "2", "third", "3"} and state.get("offered_slots"):
-        index = {"first":0,"first one":0,"1":0,"second":1,"2":1,"third":2,"3":2}[normalized]
+    if normalized in {"first", "first one", "1", "second", "2", "third", "3"} and state.get(
+        "offered_slots"
+    ):
+        index = {"first": 0, "first one": 0, "1": 0, "second": 1, "2": 1, "third": 2, "3": 2}[
+            normalized
+        ]
         if index < len(state["offered_slots"]):
             body = "slot:" + state["offered_slots"][index]
             normalized = body
@@ -226,7 +230,11 @@ def respond(
                 select(Slot).where(Slot.id == key, Slot.clinic_id == clinic.id)
             ).one()
             local = slot.starts_at.astimezone(ZoneInfo(clinic.timezone))
-            provider = session.exec(select(Provider).where(Provider.id == slot.provider_id, Provider.clinic_id == clinic.id)).one()
+            provider = session.exec(
+                select(Provider).where(
+                    Provider.id == slot.provider_id, Provider.clinic_id == clinic.id
+                )
+            ).one()
             rows.append(
                 {
                     "id": "slot:" + key,

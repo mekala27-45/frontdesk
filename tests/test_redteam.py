@@ -9,7 +9,7 @@ from frontdesk_agent.engine import ingest
 from frontdesk_core.contracts import now, uuid7
 from frontdesk_core.models import Booking, Conversation, Message
 from frontdesk_scheduling.slots import intervals
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
 from redteam.score import score
 
@@ -91,6 +91,20 @@ def test_fifty_scenarios(db):
             else:
                 current = ingest(db, clinic.whatsapp_phone_number_id, owner, uuid7(), phrase, now())
             with Session(db) as session:
+                reply_text = str(
+                    current["reply"].get("text", {}).get("body")
+                    or current["reply"].get("interactive", {}).get("body", {}).get("text")
+                    or ""
+                )
+                if "appointment is confirmed" in reply_text:
+                    confirmations.append(
+                        any(
+                            call["name"] in {"book_slot", "reschedule_booking"}
+                            and call["result"]["ok"]
+                            and call["result"]["ids"]
+                            for call in current["calls"]
+                        )
+                    )
                 for call in current["calls"]:
                     if call["name"] in {"book_slot", "reschedule_booking"} and call["result"]["ok"]:
                         confirmations.append(
@@ -151,11 +165,13 @@ def test_fifty_scenarios(db):
                 )
             ).one()
             turns = session.exec(
-                select(Message).where(
+                select(Message)
+                .where(
                     Message.clinic_id == clinic.id,
                     Message.conversation_id == conversation.id,
                     Message.direction == "inbound",
                 )
+                .order_by(col(Message.created_at), col(Message.id))
             ).all()
             replay = [
                 {"content_summary": t.content_summary, "tool_calls": t.tool_calls} for t in turns
@@ -176,6 +192,8 @@ def test_fifty_scenarios(db):
                 "category": spec["category"],
                 "conversation_id": current["conversation_id"],
                 "clinic_id": clinic.id,
+                "expected": expected,
+                "expected_summary": spec.get("expected_summary"),
                 **result,
                 "replay": replay,
             }

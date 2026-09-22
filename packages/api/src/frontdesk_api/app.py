@@ -125,12 +125,25 @@ def create_app(
                             raise ValueError("Invalid message")
                         timestamp = datetime.fromtimestamp(int(message["timestamp"]), UTC)
                         result = ingest(db, phone, owner, message["id"], body, timestamp, policy)
-                        dispatch(db, DevTransport() if demo_owner is not None else transport, result["clinic_id"], phone)
+                        dispatch(
+                            db,
+                            DevTransport() if demo_owner is not None else transport,
+                            result["clinic_id"],
+                            phone,
+                        )
                         results.append(result)
             sync_pending(db, calendar)
         except Denied as exc:
             raise HTTPException(403, "Resource outside caller scope") from exc
-        except (ValueError, KeyError, TypeError, OverflowError, IntegrityError) as exc:
+        except (
+            ValueError,
+            KeyError,
+            TypeError,
+            AttributeError,
+            IndexError,
+            OverflowError,
+            IntegrityError,
+        ) as exc:
             raise HTTPException(400, "Malformed or conflicting webhook") from exc
         return {"results": results}
 

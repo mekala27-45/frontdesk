@@ -40,6 +40,7 @@ def db():
             Path("artifacts").mkdir(exist_ok=True)
             Path("artifacts/measured.json").write_text(json.dumps(data, indent=2), encoding="utf-8")
             from scripts.evidence_db import export_snapshot
+
             export_snapshot(database, Path("artifacts/database.json"))
         database.dispose()
 

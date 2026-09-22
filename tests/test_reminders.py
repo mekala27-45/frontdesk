@@ -6,10 +6,18 @@ from frontdesk_api.reminders import signed
 from frontdesk_core.contracts import now, uuid7
 from frontdesk_core.models import ReminderAttempt, ReminderRun, Slot
 from frontdesk_scheduling.engine import claim
+from sqlalchemy import event
 from sqlmodel import Session, select
 
 
 async def test_reminder_step_actually_ran(db, clinic):
+    statements = []
+
+    def observe(conn, cursor, statement, parameters, context, executemany):
+        if "FROM booking JOIN slot" in statement:
+            statements.append(statement)
+
+    event.listen(db, "before_cursor_execute", observe)
     c, _, _, slots, _ = clinic
     with Session(db) as session:
         slot = session.get(Slot, slots[0].id)
@@ -38,6 +46,8 @@ async def test_reminder_step_actually_ran(db, clinic):
         assert (await client.post("/internal/reminders", headers=auth)).status_code == 403
         assert (await client.post("/internal/reminders", headers=headers())).status_code == 200
         assert (await client.post("/internal/reminders")).status_code == 403
+    event.remove(db, "before_cursor_execute", observe)
+    assert statements, "The due-reminder SELECT did not execute"
     with Session(db) as session:
         run = session.exec(select(ReminderRun).where(ReminderRun.nonce == auth["X-Nonce"])).one()
         assert run.query_executed is True

@@ -106,6 +106,8 @@ async def test_webhook_replay_and_restart(db, clinic):
         {
             "deliveries": 2,
             "booking_rows": len(bookings),
+            "clinic_id": c.id,
+            "wamid": wamid,
             "inbound_rows": len(messages),
             "additional_outbound_on_retry": len(transport.calls) - before,
             "restart_resumed": True,

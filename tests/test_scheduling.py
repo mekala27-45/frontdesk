@@ -47,6 +47,8 @@ async def test_fifty_concurrent_claims(db, clinic):
             ).all()
         )
     measured = {
+        "clinic_id": c.id,
+        "slot_id": slots[0].id,
         "requests": 50,
         "confirmed": codes.count(200),
         "rejected": codes.count(409),
