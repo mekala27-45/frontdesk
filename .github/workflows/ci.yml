@@ -61,6 +61,7 @@ jobs:
       - run: uv run alembic upgrade head
       - run: uv run python -m scripts.evidence_db
       - run: uv run python -m scripts.check_published_numbers
+      - run: uv run python -m scripts.showcase
   web:
     runs-on: ubuntu-latest
     defaults:
@@ -86,4 +87,3 @@ jobs:
           python-version: "3.12"
       - run: uv build --all-packages
       - run: docker build -t frontdesk:test .
-

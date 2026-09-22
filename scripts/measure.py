@@ -14,6 +14,7 @@ from sqlmodel import Session
 
 from scripts.check_published_numbers import ROOT, manifest, render
 from scripts.evidence_db import restore_snapshot
+from scripts.showcase import publish
 
 
 def main() -> None:
@@ -52,6 +53,7 @@ def main() -> None:
     snapshot = json.loads(snapshot_path.read_text())
     snapshot["evidence"].append({"name": "quality", "value": quality})
     snapshot_path.write_text(json.dumps(snapshot, separators=(",", ":")))
+    publish(ROOT, values, True)
     replay_dir = Path("docs/replays")
     replay_dir.mkdir(exist_ok=True)
     for scenario in json.loads(values["redteam"])["scenarios"]:

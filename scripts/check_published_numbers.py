@@ -100,7 +100,7 @@ def render(root: Path, values: dict[str, str], write: bool = False) -> list[str]
         result = Template(source.read_text(encoding="utf-8")).substitute(values)
         target = root / source.name
         if write:
-            target.write_text(result, encoding="utf-8")
+            target.write_text(result, encoding="utf-8", newline="\n")
         elif not target.exists() or target.read_text(encoding="utf-8") != result:
             errors.append(source.name)
     return errors
