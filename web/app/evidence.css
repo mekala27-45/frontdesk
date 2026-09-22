@@ -39,6 +39,9 @@
   font-weight: 400;
   margin: 26px 0;
 }
+.portfolio-hero > div {
+  min-width: 0;
+}
 .portfolio-hero h1 em {
   color: #0788a4;
 }
@@ -1037,13 +1040,14 @@
     padding-top: 50px;
   }
   .portfolio-hero h1 {
-    font-size: 71px;
+    font-size: clamp(48px, 15vw, 71px);
   }
   .portfolio-lead {
     font-size: 15px;
   }
   .portfolio-hero .actions {
     flex-direction: row;
+    flex-wrap: wrap;
     align-items: stretch;
     gap: 9px;
   }

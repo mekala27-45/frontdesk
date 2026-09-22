@@ -11,6 +11,7 @@ __pycache__/
 htmlcov/
 web/node_modules/
 web/.next/
+web/.next-showcase/
 web/out/
 web/*.tsbuildinfo
 artifacts/*.db
