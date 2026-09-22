@@ -2,8 +2,17 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { API, Reply, Call } from "../lib";
+import { SHOWCASE } from "../evidence/model";
+import ShowcaseNotice from "../showcase-notice";
 type Bubble = { side: "in" | "out"; text?: string; reply?: Reply };
 export default function Simulator() {
+  return SHOWCASE ? (
+    <ShowcaseNotice feature="The conversation simulator" />
+  ) : (
+    <LiveSimulator />
+  );
+}
+function LiveSimulator() {
   const [identity, setIdentity] = useState<{
       wa_id: string;
       token: string;
@@ -15,7 +24,10 @@ export default function Simulator() {
     [calls, setCalls] = useState<Call[]>([]);
   const chatBody = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    chatBody.current?.scrollTo({ top: chatBody.current.scrollHeight, behavior: "smooth" });
+    chatBody.current?.scrollTo({
+      top: chatBody.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [bubbles, busy]);
   async function send(value: string, label?: string) {
     if (busy || !value.trim()) return;

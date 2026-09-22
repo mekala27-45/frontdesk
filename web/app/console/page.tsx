@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { API, Call, Evidence, Scenario, Turn, getJSON } from "../lib";
+import { SHOWCASE } from "../evidence/model";
+import ShowcaseNotice from "../showcase-notice";
 type Ops = {
   clinic: { id: string; name: string; timezone: string };
   bookings: {
@@ -17,6 +19,13 @@ type Ops = {
   evidence: Evidence;
 };
 export default function Console() {
+  return SHOWCASE ? (
+    <ShowcaseNotice feature="The operations console" />
+  ) : (
+    <LiveConsole />
+  );
+}
+function LiveConsole() {
   const [token, setToken] = useState(""),
     [data, setData] = useState<Ops | null>(null),
     [error, setError] = useState(""),
