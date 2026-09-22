@@ -1,0 +1,9 @@
+[project]
+name = "frontdesk-agent"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["frontdesk-core","frontdesk-scheduling","frontdesk-whatsapp","frontdesk-calendar","litellm"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+

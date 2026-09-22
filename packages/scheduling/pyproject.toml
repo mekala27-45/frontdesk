@@ -1,0 +1,9 @@
+[project]
+name = "frontdesk-scheduling"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["frontdesk-core"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+

@@ -1,0 +1,9 @@
+[project]
+name = "frontdesk-calendar"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["frontdesk-core","google-api-python-client","google-auth"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+

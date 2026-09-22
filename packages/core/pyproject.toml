@@ -1,0 +1,9 @@
+[project]
+name = "frontdesk-core"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = ["sqlmodel>=0.0.24","psycopg[binary]>=3.2","pydantic-settings","structlog","tzdata"]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
