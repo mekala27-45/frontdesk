@@ -34,6 +34,7 @@ explicit_package_bases = true
 mypy_path = ["packages/core/src", "packages/scheduling/src", "packages/whatsapp/src", "packages/agent/src", "packages/calendar/src", "packages/api/src"]
 
 [tool.pytest.ini_options]
+pythonpath = ["."]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 markers = ["external: requires probed Docker and real Postgres"]
@@ -43,4 +44,3 @@ source = ["frontdesk_core", "frontdesk_scheduling", "frontdesk_whatsapp", "front
 [tool.coverage.report]
 fail_under = 80
 show_missing = true
-
