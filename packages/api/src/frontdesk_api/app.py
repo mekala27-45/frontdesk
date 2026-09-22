@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+import os
 import secrets
 from datetime import UTC, datetime, timedelta
 from typing import Any
@@ -11,6 +12,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from frontdesk_agent.engine import ingest
+from frontdesk_agent.llm import LiteLLMPolicy
 from frontdesk_calendar.adapters import (
     CalendarAdapter,
     GoogleCalendarAdapter,
@@ -54,9 +56,12 @@ def create_app(
     db: Engine | None = None,
     transport: WhatsAppTransport | None = None,
     calendar: CalendarAdapter | None = None,
+    policy: LiteLLMPolicy | None = None,
 ) -> FastAPI:
     settings = settings or Settings()
     db = db or engine(settings.database_url)
+    if policy is None and settings.llm_model and any(os.getenv(key) for key in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY")):
+        policy = LiteLLMPolicy(settings.llm_model, settings.llm_budget_usd, db)
     transport = transport or (MetaTransport(settings) if settings.meta_token else DevTransport())
     calendar = calendar or (
         GoogleCalendarAdapter(settings) if settings.google_calendar_id else NullCalendarAdapter()
@@ -115,7 +120,7 @@ def create_app(
                         if not isinstance(body, str) or len(body) > 4096:
                             raise ValueError("Invalid message")
                         timestamp = datetime.fromtimestamp(int(message["timestamp"]), UTC)
-                        result = ingest(db, phone, owner, message["id"], body, timestamp)
+                        result = ingest(db, phone, owner, message["id"], body, timestamp, policy)
                         dispatch(db, transport, result["clinic_id"], phone)
                         results.append(result)
             sync_pending(db, calendar)

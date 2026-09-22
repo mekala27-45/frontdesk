@@ -16,5 +16,7 @@ class Settings(BaseSettings):
     meta_graph_version: str = "v23.0"
     google_calendar_id: str = ""
     google_application_credentials: str = ""
-    cors_origins: str = "http://localhost:3000"
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
+    llm_model: str = ""
+    llm_budget_usd: float = 0.05
     public_demo: bool = False

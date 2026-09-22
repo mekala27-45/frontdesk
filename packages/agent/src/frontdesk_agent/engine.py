@@ -18,10 +18,11 @@ from sqlmodel import Session, select
 
 from frontdesk_agent.safety import REFUSALS, classify_safety
 from frontdesk_agent.tools import invoke
+from frontdesk_agent.llm import Intent, LiteLLMPolicy
 
 
 def respond(
-    session: Session, clinic: Clinic, convo: Conversation, body: str
+    session: Session, clinic: Clinic, convo: Conversation, body: str, policy: LiteLLMPolicy | None = None
 ) -> tuple[dict[str, Any], list[ToolCall], str]:
     owner, state = convo.wa_id, dict(convo.state)
     calls: list[ToolCall] = []
@@ -49,6 +50,15 @@ def respond(
             "handoff_wait",
         )
     normalized = body.strip().lower()
+    if policy is not None:
+        allowed: list[Intent] = ["book", "reschedule", "cancel", "my bookings", "human"]
+        cues = [intent for intent in allowed if normalized == intent]
+        if cues:
+            try:
+                normalized = policy.plan(cues).intent
+            except Exception:
+                # Missing keys, exhausted budgets and malformed plans use offline policy.
+                pass
     if normalized in {"human", "talk to a person", "person", "help from a person"}:
         call("escalate_to_human")
         return text_message(owner, "I have sent your request to the front desk."), calls, "handoff"
@@ -249,7 +259,7 @@ def respond(
 
 
 def ingest(
-    db: Engine, phone_id: str, owner: str, wamid: str, body: str, timestamp: datetime
+    db: Engine, phone_id: str, owner: str, wamid: str, body: str, timestamp: datetime, policy: LiteLLMPolicy | None = None
 ) -> dict[str, Any]:
     if not re.fullmatch(r"[A-Za-z0-9_.:-]{1,160}", wamid) or not re.fullmatch(
         r"[0-9]{5,20}", owner
@@ -284,7 +294,7 @@ def ingest(
             session.flush()
         convo.last_inbound_at = max(convo.last_inbound_at, timestamp)
         convo.last_message_id = wamid
-        payload, calls, summary = respond(session, clinic, convo, body)
+        payload, calls, summary = respond(session, clinic, convo, body, policy)
         if not can_send_free_form(convo.last_inbound_at):
             payload = template_message(owner)
         convo.state = {**convo.state, "recent": (convo.state.get("recent", []) + [summary])[-6:]}

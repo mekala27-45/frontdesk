@@ -5,7 +5,7 @@ from datetime import timedelta
 from frontdesk_core.contracts import now
 from frontdesk_core.models import Booking, Conversation, Outbox, ReminderAttempt, ReminderRun, Slot
 from frontdesk_whatsapp.protocol import template_message
-from sqlalchemy import Engine
+from sqlalchemy import Engine, text
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, col, select
 
@@ -23,6 +23,7 @@ def run(db: Engine, timestamp: str, nonce: str, supplied: str, secret: str) -> d
     ):
         raise PermissionError("Invalid reminder signature")
     with Session(db) as session:
+        session.execute(text("SELECT pg_advisory_xact_lock(7382219)"))
         attempt = ReminderRun(nonce=nonce)
         session.add(attempt)
         try:
@@ -65,7 +66,7 @@ def run(db: Engine, timestamp: str, nonce: str, supplied: str, secret: str) -> d
                 if conversation is None:
                     continue
                 row = ReminderAttempt(
-                    clinic_id=booking.clinic_id, booking_id=booking.id, hours_before=threshold
+                    clinic_id=booking.clinic_id, booking_id=booking.id, hours_before=threshold, status="queued"
                 )
                 session.add(row)
                 session.flush()
