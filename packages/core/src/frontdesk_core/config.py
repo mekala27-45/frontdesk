@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
-    database_url: str = "postgresql+psycopg://frontdesk:local-development-only@localhost:55432/frontdesk"
+    database_url: str = "postgresql+psycopg://frontdesk:local-development-only@127.0.0.1:55432/frontdesk"
     app_secret: str = "local-meta-secret"
     verify_token: str = "local-verify-token"
     ops_token: str = "local-ops-token"
@@ -15,4 +15,3 @@ class Settings(BaseSettings):
     google_application_credentials: str = ""
     cors_origins: str = "http://localhost:3000"
     public_demo: bool = False
-
