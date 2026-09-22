@@ -72,7 +72,7 @@ The emergency override runs before the optional model policy in every conversati
 
 The local simulator and API are verified. Public hosting, a live Meta webhook round trip, Google Calendar delivery and a real-device recording have **not** been verified. No credentialed provider calls were made. No custom reminder template was submitted or approved. The default template is Meta's sample and is only a transport demonstration, not a useful appointment reminder.
 
-Fly.io no longer offers a free tier. The supplied deployment configuration is pending a funded account or a different approved free host. GitHub CLI was not authenticated, so publishing, Pages, repository topics, pinning and a remote release remain pending. See the [deployment runbook](docs/runbook.md).
+Fly.io no longer offers a free tier. The supplied deployment configuration is pending a funded account or a different approved free host. The source is [published on GitHub](https://github.com/mekala27-45/frontdesk), with repository topics, a social preview and a profile pin. Public API and Pages deployment remain pending an acceptable API host. See the [deployment runbook](docs/runbook.md).
 
 English only. Rule-based interpretation is deliberately limited. No unrestricted medical conversation, payments, or production readiness claim. The console uses a demo token, not individual operator authentication. There is no HIPAA compliance claim.
 

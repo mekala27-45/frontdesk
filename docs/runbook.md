@@ -16,13 +16,13 @@ To verify committed claims in a fresh database, migrate, run uv run python -m sc
 
 ## Deployment status
 
-Live deployment is blocked by missing GitHub authentication, an API host account and a Neon connection string. Fly.io explicitly has [no free tier](https://fly.io/docs/about/cost-management/). The free-only requirement therefore conflicts with the requested host. No funded service was created.
+Live application deployment is blocked by an API host account and a Neon connection string. The GitHub repository is published and its CI passed using the authenticated browser and existing Git credentials. Fly.io explicitly has [no free tier](https://fly.io/docs/about/cost-management/). The free-only requirement therefore conflicts with the requested host. No funded service was created.
 
 The Fly configuration and Docker image are ready for account-specific configuration. Set the app name in fly.toml, create the Postgres database, configure secrets, and deploy only after choosing an acceptable hosting cost. Change every local default secret. Use a restricted CORS origin for the published Pages URL. Set database connection pooling appropriate to the hosted plan; the benchmark pool is intentionally generous.
 
 GitHub Pages requires NEXT_PUBLIC_API_URL and NEXT_PUBLIC_BASE_PATH repository variables. Never put an ops token or Meta token into the static bundle. The reminders workflow needs FRONTDESK_API_URL and REMINDER_SECRET as secrets and ENABLE_REMINDERS=true as a variable.
 
-The release workflow requires a pushed version tag. This repository has a local tag only until GitHub authentication and a remote are configured. Set repository description/topics and social preview after publishing. The local demo GIF must not be described as a real-device WhatsApp recording.
+The release workflow requires a pushed version tag. A pushed annotated version tag creates the source release. Repository description, topics, profile pin and social preview are configured. The local demo GIF must not be described as a real-device WhatsApp recording.
 
 ## Real provider setup
 

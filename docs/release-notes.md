@@ -1,4 +1,4 @@
-# Frontdesk local release
+# Frontdesk source release
 
 Fictional clinic appointment logistics with a shared Meta/simulator ingestion engine, transactional scheduling, durable conversation state, deterministic safety tools, calendar adapters and a static operations console.
 
