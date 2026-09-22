@@ -66,7 +66,10 @@ def run(db: Engine, timestamp: str, nonce: str, supplied: str, secret: str) -> d
                 if conversation is None:
                     continue
                 row = ReminderAttempt(
-                    clinic_id=booking.clinic_id, booking_id=booking.id, hours_before=threshold, status="queued"
+                    clinic_id=booking.clinic_id,
+                    booking_id=booking.id,
+                    hours_before=threshold,
+                    status="queued",
                 )
                 session.add(row)
                 session.flush()

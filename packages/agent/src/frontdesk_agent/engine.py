@@ -4,7 +4,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 from frontdesk_core.contracts import ToolArgs, ToolCall, ToolName, now
-from frontdesk_core.models import Clinic, Conversation, Message, Outbox, Service, Slot
+from frontdesk_core.models import Clinic, Conversation, Message, Outbox, Provider, Service, Slot
 from frontdesk_scheduling.engine import Denied, lock_conversation
 from frontdesk_whatsapp.protocol import (
     buttons_message,
@@ -16,13 +16,17 @@ from frontdesk_whatsapp.protocol import (
 from sqlalchemy import Engine
 from sqlmodel import Session, select
 
+from frontdesk_agent.llm import Intent, LiteLLMPolicy
 from frontdesk_agent.safety import REFUSALS, classify_safety
 from frontdesk_agent.tools import invoke
-from frontdesk_agent.llm import Intent, LiteLLMPolicy
 
 
 def respond(
-    session: Session, clinic: Clinic, convo: Conversation, body: str, policy: LiteLLMPolicy | None = None
+    session: Session,
+    clinic: Clinic,
+    convo: Conversation,
+    body: str,
+    policy: LiteLLMPolicy | None = None,
 ) -> tuple[dict[str, Any], list[ToolCall], str]:
     owner, state = convo.wa_id, dict(convo.state)
     calls: list[ToolCall] = []
@@ -89,6 +93,11 @@ def respond(
             calls,
             "confirmation",
         )
+    if normalized in {"first", "first one", "1", "second", "2", "third", "3"} and state.get("offered_slots"):
+        index = {"first":0,"first one":0,"1":0,"second":1,"2":1,"third":2,"3":2}[normalized]
+        if index < len(state["offered_slots"]):
+            body = "slot:" + state["offered_slots"][index]
+            normalized = body
     if normalized.startswith("slot:"):
         selected = body.strip()[5:]
         if selected not in state.get("offered_slots", []):
@@ -166,6 +175,9 @@ def respond(
             calls,
             "booking_choice",
         )
+    for provider in session.exec(select(Provider).where(Provider.clinic_id == clinic.id)).all():
+        if provider.name.lower() in normalized:
+            state["provider_id"] = provider.id
     chosen = next(
         (
             service
@@ -200,6 +212,7 @@ def respond(
             "check_availability",
             ToolArgs(
                 service_id=state["service_id"],
+                provider_id=state.get("provider_id"),
                 date_from=state.get("date_from"),
                 date_to=state.get("date_to"),
             ),
@@ -213,11 +226,12 @@ def respond(
                 select(Slot).where(Slot.id == key, Slot.clinic_id == clinic.id)
             ).one()
             local = slot.starts_at.astimezone(ZoneInfo(clinic.timezone))
+            provider = session.exec(select(Provider).where(Provider.id == slot.provider_id, Provider.clinic_id == clinic.id)).one()
             rows.append(
                 {
                     "id": "slot:" + key,
                     "title": local.strftime("%a %b %d %I:%M %p")[:24],
-                    "description": local.tzname() or clinic.timezone,
+                    "description": provider.name + " / " + (local.tzname() or clinic.timezone),
                 }
             )
         if rows:
@@ -259,7 +273,13 @@ def respond(
 
 
 def ingest(
-    db: Engine, phone_id: str, owner: str, wamid: str, body: str, timestamp: datetime, policy: LiteLLMPolicy | None = None
+    db: Engine,
+    phone_id: str,
+    owner: str,
+    wamid: str,
+    body: str,
+    timestamp: datetime,
+    policy: LiteLLMPolicy | None = None,
 ) -> dict[str, Any]:
     if not re.fullmatch(r"[A-Za-z0-9_.:-]{1,160}", wamid) or not re.fullmatch(
         r"[0-9]{5,20}", owner

@@ -13,6 +13,10 @@ def export_snapshot(db: Engine, target: Path) -> None:
     with db.connect() as conn:
         for table in SQLModel.metadata.sorted_tables:
             snapshot[table.name]=[dict(row) for row in conn.execute(select(table)).mappings()]
+            if table.name == "clinic":
+                for row in snapshot[table.name]:
+                    if row["whatsapp_phone_number_id"] == "demo-phone":
+                        row["whatsapp_phone_number_id"] = "evidence-" + row["id"]
     target.write_text(json.dumps(snapshot,default=lambda v:v.isoformat(),separators=(",",":")),encoding="utf-8")
 
 def restore_snapshot(db: Engine, source: Path) -> None:
@@ -34,4 +38,3 @@ def restore_snapshot(db: Engine, source: Path) -> None:
 
 if __name__=="__main__":
     restore_snapshot(engine(),Path("artifacts/database.json"))
-

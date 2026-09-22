@@ -60,7 +60,11 @@ def create_app(
 ) -> FastAPI:
     settings = settings or Settings()
     db = db or engine(settings.database_url)
-    if policy is None and settings.llm_model and any(os.getenv(key) for key in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY")):
+    if (
+        policy is None
+        and settings.llm_model
+        and any(os.getenv(key) for key in ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY"))
+    ):
         policy = LiteLLMPolicy(settings.llm_model, settings.llm_budget_usd, db)
     transport = transport or (MetaTransport(settings) if settings.meta_token else DevTransport())
     calendar = calendar or (
@@ -121,7 +125,7 @@ def create_app(
                             raise ValueError("Invalid message")
                         timestamp = datetime.fromtimestamp(int(message["timestamp"]), UTC)
                         result = ingest(db, phone, owner, message["id"], body, timestamp, policy)
-                        dispatch(db, transport, result["clinic_id"], phone)
+                        dispatch(db, DevTransport() if demo_owner is not None else transport, result["clinic_id"], phone)
                         results.append(result)
             sync_pending(db, calendar)
         except Denied as exc:
