@@ -2,9 +2,33 @@
 
 **No clinical data is persisted or logged.** This fictional clinic demo handles appointment logistics only. Incoming text is transient; durable conversations contain generated summaries, structured tool calls, and a fixed demo visitor alias.
 
+**A WhatsApp booking agent built around the hard parts: competing claims, webhook retries, and auditable safety decisions.** FastAPI, PostgreSQL, typed tools, and a Next.js evidence explorer.
+
+[![CI](https://github.com/mekala27-45/frontdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/mekala27-45/frontdesk/actions/workflows/ci.yml)
+[![Pages](https://github.com/mekala27-45/frontdesk/actions/workflows/pages.yml/badge.svg)](https://github.com/mekala27-45/frontdesk/actions/workflows/pages.yml)
+
+**[Open the public evidence explorer](https://mekala27-45.github.io/frontdesk/)** · [Architecture](ARCHITECTURE.md) · [Measured results](RESULTS.md) · [Case study](docs/case-study.md)
+
+No setup or login needed. Explore recorded test results, search scenarios, step through persisted tool traces, and compare expected calls with observed decisions. The public site serves archived synthetic evidence. The full booking simulator and operations console run locally against the real API.
+
+![Public evidence explorer](docs/evidence-explorer.png)
+
+## Review path
+
+| Engineering question | Inspect the proof | Read the implementation |
+| --- | --- | --- |
+| Can competing requests double-book? | [Concurrency test](tests/test_scheduling.py) | [Provider and slot locks](packages/scheduling/src/frontdesk_scheduling/engine.py) |
+| What happens after a retry or restart? | [Webhook tests](tests/test_webhook.py) | [Durable conversation engine](packages/agent/src/frontdesk_agent/engine.py) |
+| Does the agent actually refuse unsafe requests? | [Scenario explorer](https://mekala27-45.github.io/frontdesk/evidence/#scenario=34-medical) | [Safety rules](packages/agent/src/frontdesk_agent/safety.py) and [deterministic scorer](redteam/score.py) |
+| Can a tool cross a tenant boundary? | [Tenant isolation tests](tests/test_tenants.py) | [Scoped tool dispatch](packages/agent/src/frontdesk_agent/tools.py) |
+| Can the published numbers drift? | [Database claim gate](scripts/check_published_numbers.py) | [Public evidence exporter](scripts/showcase.py) |
+
 ## The scheduling proof
 
 Measured against real Postgres, through concurrent HTTP requests to the FastAPI application:
+
+<details>
+<summary>Inspect the measured concurrency record</summary>
 
 ~~~json
 {
@@ -21,9 +45,16 @@ Measured against real Postgres, through concurrent HTTP requests to the FastAPI 
 }
 ~~~
 
+</details>
+
 The connection pool is warmed before timing. This is a local ASGI benchmark, not an internet latency measurement. [Full results](RESULTS.md) include tenant isolation, daylight saving transitions, duplicate delivery and every scenario.
 
+<details>
+<summary>Watch the local booking simulator walkthrough</summary>
+
 ![Recorded local simulator walkthrough](docs/demo.gif)
+
+</details>
 
 ## Try it locally
 
@@ -70,9 +101,9 @@ The emergency override runs before the optional model policy in every conversati
 
 ## Deployment state and limits
 
-The local simulator and API are verified. Public hosting, a live Meta webhook round trip, Google Calendar delivery and a real-device recording have **not** been verified. No credentialed provider calls were made. No custom reminder template was submitted or approved. The default template is Meta's sample and is only a transport demonstration, not a useful appointment reminder.
+The public portfolio is a static GitHub Pages evidence explorer with no API credentials or live booking endpoint. Its JSON is rendered from verified PostgreSQL evidence, and publication waits for successful CI. The local simulator and API are verified. A live Meta webhook round trip, Google Calendar delivery and a real-device recording have **not** been verified. No credentialed provider calls were made. No custom reminder template was submitted or approved. The default template is Meta's sample and is only a transport demonstration, not a useful appointment reminder.
 
-Fly.io no longer offers a free tier. The supplied deployment configuration is pending a funded account or a different approved free host. The source is [published on GitHub](https://github.com/mekala27-45/frontdesk), with repository topics, a social preview and a profile pin. Public API and Pages deployment remain pending an acceptable API host. See the [deployment runbook](docs/runbook.md).
+An always-on public API is optional for this portfolio. Fly.io no longer offers a free tier, so no funded backend was provisioned. See the [showcase publication guide](docs/showcase.md) or the [API deployment runbook](docs/runbook.md).
 
 English only. Rule-based interpretation is deliberately limited. No unrestricted medical conversation, payments, or production readiness claim. The console uses a demo token, not individual operator authentication. There is no HIPAA compliance claim.
 
@@ -83,6 +114,7 @@ Meta can accept a message before a connection fails. Ambiguous sends are marked 
 ~~~sh
 uv run python -m scripts.measure
 uv run python -m scripts.check_published_numbers
+uv run python -m scripts.showcase
 uv run python -m scripts.check_no_em_dash
 uv run python -m scripts.check_timezones
 uv run ruff check .

@@ -20,7 +20,8 @@ A competing slot claim gets a clean rejection. A failed reschedule leaves the or
 
 ## What remains unproven
 
-The browser GIF uses the real local engine with DevTransport. Public hosting, a real-device WhatsApp recording, Google Calendar delivery and a custom approved reminder template remain unverified. Fly's current paid hosting conflicts with the original free-only brief.
+The public evidence explorer makes the archived test run inspectable without an API account. It offers guided scenario replay, expected-versus-observed tool checks, a source map, downloadable evidence, and the relational snapshot digest. CI restores the database snapshot and verifies the public JSON before publication.
+
+The browser GIF uses the real local engine with DevTransport. A public booking API, a real-device WhatsApp recording, Google Calendar delivery and a custom approved reminder template remain unverified. The portfolio deliberately uses static hosting so reviewing the engineering does not depend on provider credentials or a sleeping API.
 
 See [measured results](../RESULTS.md), [architecture](../ARCHITECTURE.md) and the [runbook](runbook.md).
-

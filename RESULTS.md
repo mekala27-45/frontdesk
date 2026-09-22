@@ -150,7 +150,7 @@ Audit links contain generated summaries and structured tool calls, not raw inbou
 
 ## Limits and unmeasured work
 
-- No public Fly API or GitHub Pages deployment, live Meta device conversation, or live Google Calendar round trip was performed.
+- The public GitHub Pages explorer serves recorded test evidence. No public API, live Meta device conversation, or live Google Calendar round trip was verified.
 - The sample template demonstrates formatting and dispatch. A custom utility reminder remains unsubmitted and unapproved.
 - GitHub scheduled jobs can be delayed. The reminder query catches due work, but scheduling is not a real-time guarantee.
 - The rule-based emergency vocabulary is finite and can miss unfamiliar wording. This is a fictional logistics demo, not emergency triage.
@@ -158,4 +158,3 @@ Audit links contain generated summaries and structured tool calls, not raw inbou
 - External message delivery cannot be atomically committed with Postgres. Sending/unknown outbox entries need operator reconciliation.
 - Slot utilization counts service candidates, which can overlap. It is not a count of independent provider capacity.
 - There is no public abuse protection, per-operator identity, or comprehensive retention scheduler. Do not use real patient information.
-

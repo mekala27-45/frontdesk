@@ -54,3 +54,8 @@ Tests use Postgres via testcontainers. A synthetic relational snapshot preserves
 
 The local browser walkthrough is a recording of this system using DevTransport. It is not a recording of WhatsApp on a real device.
 
+## Public review without a live backend
+
+The Pages build is a static evidence explorer. Its public JSON is rendered only after the database claim gate checks the archived source rows and independently rescores the scenarios. A snapshot digest identifies the exact relational evidence behind the page. The public exporter excludes operational tables, clinic/conversation identifiers and recipient fields from tool arguments.
+
+The explorer offers search, category filters, stepped audit replay, expected-versus-observed calls, and links from design decisions to implementation and tests. It does not execute a second booking engine or make live API calls. The normal local build retains the original API-backed simulator and operations console. This separation makes recruiter review reliable without inventing a live integration claim.

@@ -8,5 +8,6 @@ Reusable: message-id deduplication plus a transactional outbox; provider locks f
 
 Finding: a claim gate caught unstable replay ordering that the scenario assertions alone missed. Outbound HTTP delivery needs an explicit ambiguous state because a database cannot atomically commit a remote side effect.
 
-Measured results are linked in RESULTS.md rather than repeated here. The source repository and CI are published. Live API/Pages hosting, provider round trips and custom template approval remain pending. The demo GIF records the local browser simulator, not an actual WhatsApp device.
+Measured results are linked in RESULTS.md rather than repeated here. The source repository and CI are published. Live API hosting, provider round trips and custom template approval remain pending. The demo GIF records the local browser simulator, not an actual WhatsApp device.
 
+The recruiter showcase adds a static evidence explorer with search, category filters, stepped replays, expected-versus-observed calls, implementation links, and downloadable evidence with a snapshot digest. A new gate verifies the public JSON against PostgreSQL audit rows before Pages publication. This makes the engineering reviewable without a hosting account or live credentials.

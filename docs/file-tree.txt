@@ -1,245 +1,217 @@
-frontdesk/
-|-- .dockerignore
-|-- .env.example
-|-- .github/
-|   `-- workflows/
-|       |-- ci.yml
-|       |-- pages.yml
-|       |-- release.yml
-|       `-- reminders.yml
-|-- .gitignore
-|-- ARCHITECTURE.md
-|-- CONTRIBUTING.md
-|-- Dockerfile
-|-- LICENSE
-|-- Makefile
-|-- README.md
-|-- RESULTS.md
-|-- alembic.ini
-|-- artifacts/
-|   |-- database.json
-|   `-- measured.json
-|-- claude/
-|   `-- build-series-log.md
-|-- compose.yml
-|-- docs/
-|   |-- case-study.md
-|   |-- data.md
-|   |-- demo-step-0.png
-|   |-- demo-step-1.png
-|   |-- demo-step-2.png
-|   |-- demo-step-3.png
-|   |-- demo-step-4.png
-|   |-- demo.gif
-|   |-- file-tree.txt
-|   |-- linkedin-draft.md
-|   |-- release-notes.md
-|   |-- replays/
-|   |   |-- 01-booking.md
-|   |   |-- 02-booking.md
-|   |   |-- 03-booking.md
-|   |   |-- 04-booking.md
-|   |   |-- 05-booking.md
-|   |   |-- 06-booking.md
-|   |   |-- 07-booking.md
-|   |   |-- 08-booking.md
-|   |   |-- 09-changes.md
-|   |   |-- 10-changes.md
-|   |   |-- 11-changes.md
-|   |   |-- 12-changes.md
-|   |   |-- 13-changes.md
-|   |   |-- 14-changes.md
-|   |   |-- 15-ambiguous.md
-|   |   |-- 16-ambiguous.md
-|   |   |-- 17-ambiguous.md
-|   |   |-- 18-ambiguous.md
-|   |   |-- 19-ambiguous.md
-|   |   |-- 20-ambiguous.md
-|   |   |-- 21-injection.md
-|   |   |-- 22-injection.md
-|   |   |-- 23-injection.md
-|   |   |-- 24-injection.md
-|   |   |-- 25-injection.md
-|   |   |-- 26-injection.md
-|   |   |-- 27-injection.md
-|   |   |-- 28-injection.md
-|   |   |-- 29-injection.md
-|   |   |-- 30-injection.md
-|   |   |-- 31-medical.md
-|   |   |-- 32-medical.md
-|   |   |-- 33-medical.md
-|   |   |-- 34-medical.md
-|   |   |-- 35-medical.md
-|   |   |-- 36-medical.md
-|   |   |-- 37-privacy.md
-|   |   |-- 38-privacy.md
-|   |   |-- 39-privacy.md
-|   |   |-- 40-privacy.md
-|   |   |-- 41-concurrency.md
-|   |   |-- 42-concurrency.md
-|   |   |-- 43-concurrency.md
-|   |   |-- 44-concurrency.md
-|   |   |-- 45-boundaries.md
-|   |   |-- 46-boundaries.md
-|   |   |-- 47-boundaries.md
-|   |   |-- 48-boundaries.md
-|   |   |-- 49-boundaries.md
-|   |   `-- 50-boundaries.md
-|   |-- runbook.md
-|   |-- safety.md
-|   |-- social-preview.png
-|   |-- templates/
-|   |   |-- README.md
-|   |   `-- RESULTS.md
-|   `-- whatsapp-integration.md
-|-- fly.toml
-|-- packages/
-|   |-- agent/
-|   |   |-- pyproject.toml
-|   |   `-- src/
-|   |       `-- frontdesk_agent/
-|   |           |-- __init__.py
-|   |           |-- engine.py
-|   |           |-- llm.py
-|   |           |-- py.typed
-|   |           |-- safety.py
-|   |           `-- tools.py
-|   |-- api/
-|   |   |-- migrations/
-|   |   |   |-- env.py
-|   |   |   `-- versions/
-|   |   |       `-- 0001_initial.py
-|   |   |-- pyproject.toml
-|   |   `-- src/
-|   |       `-- frontdesk_api/
-|   |           |-- __init__.py
-|   |           |-- app.py
-|   |           |-- py.typed
-|   |           `-- reminders.py
-|   |-- calendar/
-|   |   |-- pyproject.toml
-|   |   `-- src/
-|   |       `-- frontdesk_calendar/
-|   |           |-- __init__.py
-|   |           |-- adapters.py
-|   |           `-- py.typed
-|   |-- core/
-|   |   |-- pyproject.toml
-|   |   `-- src/
-|   |       `-- frontdesk_core/
-|   |           |-- __init__.py
-|   |           |-- config.py
-|   |           |-- contracts.py
-|   |           |-- db.py
-|   |           |-- logging.py
-|   |           |-- models.py
-|   |           `-- py.typed
-|   |-- scheduling/
-|   |   |-- pyproject.toml
-|   |   `-- src/
-|   |       `-- frontdesk_scheduling/
-|   |           |-- __init__.py
-|   |           |-- engine.py
-|   |           |-- py.typed
-|   |           `-- slots.py
-|   `-- whatsapp/
-|       |-- pyproject.toml
-|       `-- src/
-|           `-- frontdesk_whatsapp/
-|               |-- __init__.py
-|               |-- protocol.py
-|               |-- py.typed
-|               `-- transport.py
-|-- pyproject.toml
-|-- redteam/
-|   |-- __init__.py
-|   |-- judge.py
-|   |-- scenarios/
-|   |   |-- 01-booking.json
-|   |   |-- 02-booking.json
-|   |   |-- 03-booking.json
-|   |   |-- 04-booking.json
-|   |   |-- 05-booking.json
-|   |   |-- 06-booking.json
-|   |   |-- 07-booking.json
-|   |   |-- 08-booking.json
-|   |   |-- 09-changes.json
-|   |   |-- 10-changes.json
-|   |   |-- 11-changes.json
-|   |   |-- 12-changes.json
-|   |   |-- 13-changes.json
-|   |   |-- 14-changes.json
-|   |   |-- 15-ambiguous.json
-|   |   |-- 16-ambiguous.json
-|   |   |-- 17-ambiguous.json
-|   |   |-- 18-ambiguous.json
-|   |   |-- 19-ambiguous.json
-|   |   |-- 20-ambiguous.json
-|   |   |-- 21-injection.json
-|   |   |-- 22-injection.json
-|   |   |-- 23-injection.json
-|   |   |-- 24-injection.json
-|   |   |-- 25-injection.json
-|   |   |-- 26-injection.json
-|   |   |-- 27-injection.json
-|   |   |-- 28-injection.json
-|   |   |-- 29-injection.json
-|   |   |-- 30-injection.json
-|   |   |-- 31-medical.json
-|   |   |-- 32-medical.json
-|   |   |-- 33-medical.json
-|   |   |-- 34-medical.json
-|   |   |-- 35-medical.json
-|   |   |-- 36-medical.json
-|   |   |-- 37-privacy.json
-|   |   |-- 38-privacy.json
-|   |   |-- 39-privacy.json
-|   |   |-- 40-privacy.json
-|   |   |-- 41-concurrency.json
-|   |   |-- 42-concurrency.json
-|   |   |-- 43-concurrency.json
-|   |   |-- 44-concurrency.json
-|   |   |-- 45-boundaries.json
-|   |   |-- 46-boundaries.json
-|   |   |-- 47-boundaries.json
-|   |   |-- 48-boundaries.json
-|   |   |-- 49-boundaries.json
-|   |   `-- 50-boundaries.json
-|   `-- score.py
-|-- scripts/
-|   |-- __init__.py
-|   |-- check_no_em_dash.py
-|   |-- check_published_numbers.py
-|   |-- check_timezones.py
-|   |-- evidence_db.py
-|   |-- loadtest_slot_claim.py
-|   |-- measure.py
-|   |-- optional_model_run.py
-|   |-- seed.py
-|   `-- trigger_reminders.py
-|-- tests/
-|   |-- conftest.py
-|   |-- test_adapters.py
-|   |-- test_gates.py
-|   |-- test_redteam.py
-|   |-- test_reminders.py
-|   |-- test_scheduling.py
-|   |-- test_tenants.py
-|   `-- test_webhook.py
-|-- uv.lock
-`-- web/
-    |-- app/
-    |   |-- console/
-    |   |   `-- page.tsx
-    |   |-- layout.tsx
-    |   |-- lib.ts
-    |   |-- page.tsx
-    |   |-- simulator/
-    |   |   `-- page.tsx
-    |   `-- style.css
-    |-- next-env.d.ts
-    |-- next.config.ts
-    |-- package-lock.json
-    |-- package.json
-    |-- postcss.config.mjs
-    `-- tsconfig.json
+.dockerignore
+.env.example
+.github/workflows/ci.yml
+.github/workflows/pages.yml
+.github/workflows/release.yml
+.github/workflows/reminders.yml
+.gitignore
+ARCHITECTURE.md
+CONTRIBUTING.md
+Dockerfile
+LICENSE
+Makefile
+README.md
+RESULTS.md
+alembic.ini
+artifacts/database.json
+artifacts/measured.json
+claude/build-series-log.md
+compose.yml
+docs/case-study.md
+docs/data.md
+docs/demo-step-0.png
+docs/demo-step-1.png
+docs/demo-step-2.png
+docs/demo-step-3.png
+docs/demo-step-4.png
+docs/demo.gif
+docs/evidence-explorer.png
+docs/file-tree.txt
+docs/linkedin-draft.md
+docs/release-notes.md
+docs/replays/01-booking.md
+docs/replays/02-booking.md
+docs/replays/03-booking.md
+docs/replays/04-booking.md
+docs/replays/05-booking.md
+docs/replays/06-booking.md
+docs/replays/07-booking.md
+docs/replays/08-booking.md
+docs/replays/09-changes.md
+docs/replays/10-changes.md
+docs/replays/11-changes.md
+docs/replays/12-changes.md
+docs/replays/13-changes.md
+docs/replays/14-changes.md
+docs/replays/15-ambiguous.md
+docs/replays/16-ambiguous.md
+docs/replays/17-ambiguous.md
+docs/replays/18-ambiguous.md
+docs/replays/19-ambiguous.md
+docs/replays/20-ambiguous.md
+docs/replays/21-injection.md
+docs/replays/22-injection.md
+docs/replays/23-injection.md
+docs/replays/24-injection.md
+docs/replays/25-injection.md
+docs/replays/26-injection.md
+docs/replays/27-injection.md
+docs/replays/28-injection.md
+docs/replays/29-injection.md
+docs/replays/30-injection.md
+docs/replays/31-medical.md
+docs/replays/32-medical.md
+docs/replays/33-medical.md
+docs/replays/34-medical.md
+docs/replays/35-medical.md
+docs/replays/36-medical.md
+docs/replays/37-privacy.md
+docs/replays/38-privacy.md
+docs/replays/39-privacy.md
+docs/replays/40-privacy.md
+docs/replays/41-concurrency.md
+docs/replays/42-concurrency.md
+docs/replays/43-concurrency.md
+docs/replays/44-concurrency.md
+docs/replays/45-boundaries.md
+docs/replays/46-boundaries.md
+docs/replays/47-boundaries.md
+docs/replays/48-boundaries.md
+docs/replays/49-boundaries.md
+docs/replays/50-boundaries.md
+docs/runbook.md
+docs/safety.md
+docs/showcase.md
+docs/social-preview.png
+docs/templates/README.md
+docs/templates/RESULTS.md
+docs/whatsapp-integration.md
+fly.toml
+packages/agent/pyproject.toml
+packages/agent/src/frontdesk_agent/__init__.py
+packages/agent/src/frontdesk_agent/engine.py
+packages/agent/src/frontdesk_agent/llm.py
+packages/agent/src/frontdesk_agent/py.typed
+packages/agent/src/frontdesk_agent/safety.py
+packages/agent/src/frontdesk_agent/tools.py
+packages/api/migrations/env.py
+packages/api/migrations/versions/0001_initial.py
+packages/api/pyproject.toml
+packages/api/src/frontdesk_api/__init__.py
+packages/api/src/frontdesk_api/app.py
+packages/api/src/frontdesk_api/py.typed
+packages/api/src/frontdesk_api/reminders.py
+packages/calendar/pyproject.toml
+packages/calendar/src/frontdesk_calendar/__init__.py
+packages/calendar/src/frontdesk_calendar/adapters.py
+packages/calendar/src/frontdesk_calendar/py.typed
+packages/core/pyproject.toml
+packages/core/src/frontdesk_core/__init__.py
+packages/core/src/frontdesk_core/config.py
+packages/core/src/frontdesk_core/contracts.py
+packages/core/src/frontdesk_core/db.py
+packages/core/src/frontdesk_core/logging.py
+packages/core/src/frontdesk_core/models.py
+packages/core/src/frontdesk_core/py.typed
+packages/scheduling/pyproject.toml
+packages/scheduling/src/frontdesk_scheduling/__init__.py
+packages/scheduling/src/frontdesk_scheduling/engine.py
+packages/scheduling/src/frontdesk_scheduling/py.typed
+packages/scheduling/src/frontdesk_scheduling/slots.py
+packages/whatsapp/pyproject.toml
+packages/whatsapp/src/frontdesk_whatsapp/__init__.py
+packages/whatsapp/src/frontdesk_whatsapp/protocol.py
+packages/whatsapp/src/frontdesk_whatsapp/py.typed
+packages/whatsapp/src/frontdesk_whatsapp/transport.py
+pyproject.toml
+redteam/__init__.py
+redteam/judge.py
+redteam/scenarios/01-booking.json
+redteam/scenarios/02-booking.json
+redteam/scenarios/03-booking.json
+redteam/scenarios/04-booking.json
+redteam/scenarios/05-booking.json
+redteam/scenarios/06-booking.json
+redteam/scenarios/07-booking.json
+redteam/scenarios/08-booking.json
+redteam/scenarios/09-changes.json
+redteam/scenarios/10-changes.json
+redteam/scenarios/11-changes.json
+redteam/scenarios/12-changes.json
+redteam/scenarios/13-changes.json
+redteam/scenarios/14-changes.json
+redteam/scenarios/15-ambiguous.json
+redteam/scenarios/16-ambiguous.json
+redteam/scenarios/17-ambiguous.json
+redteam/scenarios/18-ambiguous.json
+redteam/scenarios/19-ambiguous.json
+redteam/scenarios/20-ambiguous.json
+redteam/scenarios/21-injection.json
+redteam/scenarios/22-injection.json
+redteam/scenarios/23-injection.json
+redteam/scenarios/24-injection.json
+redteam/scenarios/25-injection.json
+redteam/scenarios/26-injection.json
+redteam/scenarios/27-injection.json
+redteam/scenarios/28-injection.json
+redteam/scenarios/29-injection.json
+redteam/scenarios/30-injection.json
+redteam/scenarios/31-medical.json
+redteam/scenarios/32-medical.json
+redteam/scenarios/33-medical.json
+redteam/scenarios/34-medical.json
+redteam/scenarios/35-medical.json
+redteam/scenarios/36-medical.json
+redteam/scenarios/37-privacy.json
+redteam/scenarios/38-privacy.json
+redteam/scenarios/39-privacy.json
+redteam/scenarios/40-privacy.json
+redteam/scenarios/41-concurrency.json
+redteam/scenarios/42-concurrency.json
+redteam/scenarios/43-concurrency.json
+redteam/scenarios/44-concurrency.json
+redteam/scenarios/45-boundaries.json
+redteam/scenarios/46-boundaries.json
+redteam/scenarios/47-boundaries.json
+redteam/scenarios/48-boundaries.json
+redteam/scenarios/49-boundaries.json
+redteam/scenarios/50-boundaries.json
+redteam/score.py
+scripts/__init__.py
+scripts/check_no_em_dash.py
+scripts/check_published_numbers.py
+scripts/check_timezones.py
+scripts/evidence_db.py
+scripts/loadtest_slot_claim.py
+scripts/measure.py
+scripts/optional_model_run.py
+scripts/seed.py
+scripts/showcase.py
+scripts/trigger_reminders.py
+tests/conftest.py
+tests/test_adapters.py
+tests/test_gates.py
+tests/test_redteam.py
+tests/test_reminders.py
+tests/test_scheduling.py
+tests/test_showcase.py
+tests/test_tenants.py
+tests/test_webhook.py
+uv.lock
+web/app/console/page.tsx
+web/app/evidence.css
+web/app/evidence/model.ts
+web/app/evidence/page.tsx
+web/app/layout.tsx
+web/app/lib.ts
+web/app/page.tsx
+web/app/showcase-notice.tsx
+web/app/simulator/page.tsx
+web/app/style.css
+web/next-env.d.ts
+web/next.config.ts
+web/package-lock.json
+web/package.json
+web/postcss.config.mjs
+web/public/evidence.json
+web/tsconfig.json
